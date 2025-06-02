@@ -12,10 +12,6 @@ interface AiGeneratedContent extends Omit<BlogPostContent, 'coverImageUrl'> {
   imageSearchKeywords: string[];
 }
 
-// const openai = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY, // Will be undefined if not set in .env.local
-// });
-
 const MODEL_NAME = "gemini-1.5-flash-latest"; // Or "gemini-pro" / "gemini-1.0-pro"
 
 /**
@@ -67,7 +63,6 @@ Generate the blog post JSON.`;
       throw new Error("Google Gemini API returned no content.");
     }
     
-    // Parse the JSON response which now includes imageSearchKeywords
     const parsedContent = JSON.parse(textContentString) as AiGeneratedContent;
     console.log(`Google Gemini API text generation successful for ${fileName || 'uploaded document'}.`);
     console.log(`Suggested image search keywords: ${parsedContent.imageSearchKeywords.join(', ')}`);
@@ -77,7 +72,6 @@ Generate the blog post JSON.`;
     if (parsedContent.imageSearchKeywords && parsedContent.imageSearchKeywords.length > 0) {
       console.log(`Attempting to find an image URL with Gemini using keywords: ${parsedContent.imageSearchKeywords.join(', ')} for title: "${parsedContent.title}"`);
       
-      // Use the same model for the second call
       const imageSearchPrompt = `You are an AI assistant helping to find a relevant cover image for a blog post.
 Blog Post Title: "${parsedContent.title}"
 Suggested Keywords: ${parsedContent.imageSearchKeywords.join(', ')}
@@ -89,8 +83,7 @@ If you cannot find a suitable and directly linkable image, return {"imageUrl": n
 Do not provide any other text, explanation, or formatting. Just the JSON object.`;
 
       try {
-        // Re-using the same model instance 'model' configured earlier
-        const imageSearchResult = await model.generateContent(imageSearchPrompt); // Still expecting JSON
+        const imageSearchResult = await model.generateContent(imageSearchPrompt); 
         const imageSearchResponse = imageSearchResult.response;
         const imageUrlString = imageSearchResponse.text();
 
@@ -113,6 +106,13 @@ Do not provide any other text, explanation, or formatting. Just the JSON object.
       }
     } else {
       console.warn("No image search keywords provided by the initial AI generation. Skipping image URL search.");
+    }
+
+    // Fallback to placeholder if Gemini didn't find an image or if search was skipped
+    if (!coverImageUrl) {
+      const randomIdForFallback = Math.random().toString(36).substring(2, 9);
+      coverImageUrl = `https://picsum.photos/seed/${randomIdForFallback}/1024/768`;
+      console.log(`Gemini image search failed or was skipped. Using fallback placeholder image: ${coverImageUrl}`);
     }
 
     return {
@@ -139,8 +139,7 @@ function generatePlaceholderBlogPost(
 ): BlogPostContent {
   console.log(`AI Service: Simulating blog post generation for ${fileName || 'uploaded document'}${errorContext ? ` (Error: ${errorContext})` : ''}...`);
   
-  const randomId = Math.random().toString(36).substring(7);
-  const placeholderTitle = `Amazing Insights from ${fileName || 'Your Document'} (Placeholder ${randomId})`;
+  const placeholderTitle = `Amazing Insights from ${fileName || 'Your Document'} (Placeholder ${Math.random().toString(36).substring(7)})`;
   const placeholderSubtitle = `A deep dive into the key points of ${fileName || 'the uploaded content'}. (Placeholder Subtitle)`;
   
   let placeholderBody = `This is a **placeholder** blog post exploring the content found in *${fileName || 'your document'}*.\n\n`;
@@ -162,21 +161,14 @@ function generatePlaceholderBlogPost(
   }
   placeholderBody += `\nFurther analysis by a sophisticated AI model (like OpenAI's GPT series) would yield a much richer and more engaging blog post. This is just a simulation.`;
 
-  // Simulate a placeholder image URL using a dynamic service
-  // const imageKeywords = (fileName || "abstract").split('.')[0].replace(/\s+/g, '+');
-  // const placeholderImageUrl = `https://source.unsplash.com/featured/1024x768/?${imageKeywords},${randomId}`;
-  // Or use picsum: `https://picsum.photos/seed/${randomId}/1024/768`
-  // console.log(`Using placeholder image URL: ${placeholderImageUrl}`);
-  // No longer using Unsplash/Picsum for placeholders if main generation fails.
-  // The main function will return undefined for coverImageUrl if Gemini image gen fails.
-
-  console.log(`No dynamic placeholder image will be used for this simulated post.`);
-
+  const randomIdForPlaceholder = Math.random().toString(36).substring(2, 9);
+  const placeholderImageUrl = `https://picsum.photos/seed/${randomIdForPlaceholder}/1024/768`;
+  console.log(`Using placeholder image URL for simulated post: ${placeholderImageUrl}`);
 
   return {
     title: placeholderTitle,
     subtitle: placeholderSubtitle,
     body: placeholderBody,
-    coverImageUrl: undefined, // No placeholder image if AI fails and this function is called
+    coverImageUrl: placeholderImageUrl,
   };
 }
