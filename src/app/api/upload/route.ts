@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic'; // Prevent static analysis issues
 import mammoth from 'mammoth';
 import pdf from 'pdf-parse';
 import { generateBlogPostFromText, BlogPostContent } from '@/lib/ai';
