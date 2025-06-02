@@ -24,6 +24,7 @@ export async function generateMetadata({ params }:any) {
 }
 
 export default async function BlogPostDetailPage({ params }: any) {
+  await params
   const post = await prisma.blogPost.findUnique({
     where: { id: params.id },
   });
