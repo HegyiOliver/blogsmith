@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <section className="container flex flex-col items-center justify-center gap-8 py-12 md:py-20 text-center">
+    <section className="container flex flex-col items-center justify-center gap-8 py-12 md:py-20 text-center bg-primary">
       <div className="flex max-w-3xl flex-col items-center gap-4">
         <h1 className="text-4xl font-extrabold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
           Welcome to <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">BlogSmith</span>
