@@ -9,7 +9,6 @@ datasource db {
   provider          = "postgresql"
   url               = env("POSTGRES_PRISMA_URL") // For Prisma Client (uses connection pooling)
   directUrl         = env("POSTGRES_URL_NON_POOLING") // For migrations (direct connection)
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING_SHADOW") // For shadow database during migrations
 }
 
 model BlogPost {
