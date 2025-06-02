@@ -37,17 +37,17 @@ export default async function BlogPostDetailPage({ params }: Props) {
   }
 
   return (
-    <article className="container max-w-3xl py-8 md:py-12">
+    <article className="container m-auto max-w-3xl py-8 md:py-12">
       <header className="mb-8 text-center">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl lg:text-5xl mb-3">
+        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl lg:text-5xl mb-3 !text-blue-100">
           {post.title}
         </h1>
         {post.subtitle && (
-          <p className="text-lg md:text-xl text-muted-foreground">
+          <p className="text-lg md:text-xl  !text-blue-100">
             {post.subtitle}
           </p>
         )}
-        <p className="text-sm text-muted-foreground mt-2">
+        <p className="text-sm !text-blue-50 mt-2">
           Published on {new Date(post.createdAt).toLocaleDateString()}
         </p>
       </header>
@@ -68,7 +68,7 @@ export default async function BlogPostDetailPage({ params }: Props) {
       <div className="prose prose-slate dark:prose-invert max-w-none 
                       prose-headings:font-semibold prose-headings:tracking-tight 
                       prose-a:text-primary hover:prose-a:text-primary/80
-                      prose-img:rounded-md prose-img:shadow-sm">
+                      prose-img:rounded-md prose-img:shadow-sm !text-blue-50">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {post.body}
         </ReactMarkdown>

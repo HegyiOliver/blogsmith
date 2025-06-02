@@ -4,7 +4,12 @@ export interface BlogPostContent {
   title: string;
   subtitle: string;
   body: string;
-  coverImageUrl?: string;
+  coverImageUrl?: string; // This will be populated by a new mechanism
+}
+
+// Interface for the AI's structured response including keywords
+interface AiGeneratedContent extends Omit<BlogPostContent, 'coverImageUrl'> {
+  imageSearchKeywords: string[];
 }
 
 // const openai = new OpenAI({
@@ -43,9 +48,9 @@ export async function generateBlogPostFromText(
 
   const prompt = `You are an expert blog post writer. Your task is to generate a blog post based on the provided text.
 The blog post should have a compelling title, an engaging subtitle, and a well-structured body.
+Additionally, provide an array of 3-5 relevant keywords that can be used to search for a suitable cover image on the internet.
 The tone should be informative yet entertaining.
-The output must be a JSON object with the following structure: {"title": "string", "subtitle": "string", "body": "string (markdown format)"}.
-Do NOT include an "imagePrompt" field in the JSON.
+The output must be a JSON object with the following structure: {"title": "string", "subtitle": "string", "body": "string (markdown format)", "imageSearchKeywords": ["string", "string", ...]}.
 
 Here is the text extracted from the document titled "${fileName || 'document'}":
 ---
@@ -62,20 +67,59 @@ Generate the blog post JSON.`;
       throw new Error("Google Gemini API returned no content.");
     }
     
-    const parsedTextContent = JSON.parse(textContentString) as {title: string, subtitle: string, body: string};
+    // Parse the JSON response which now includes imageSearchKeywords
+    const parsedContent = JSON.parse(textContentString) as AiGeneratedContent;
     console.log(`Google Gemini API text generation successful for ${fileName || 'uploaded document'}.`);
+    console.log(`Suggested image search keywords: ${parsedContent.imageSearchKeywords.join(', ')}`);
 
-    // Image generation with DALL-E is disabled when using Gemini.
-    // We can explore Gemini's image capabilities (e.g., Imagen) later if needed.
-    let coverImageUrl: string | undefined = undefined; 
-    console.warn("Image generation with DALL-E is currently disabled as we are using Google Gemini for text. A placeholder image will be used if the placeholder function is called, or no image if generation is successful.");
+    let coverImageUrl: string | undefined = undefined;
 
+    if (parsedContent.imageSearchKeywords && parsedContent.imageSearchKeywords.length > 0) {
+      console.log(`Attempting to find an image URL with Gemini using keywords: ${parsedContent.imageSearchKeywords.join(', ')} for title: "${parsedContent.title}"`);
+      
+      // Use the same model for the second call
+      const imageSearchPrompt = `You are an AI assistant helping to find a relevant cover image for a blog post.
+Blog Post Title: "${parsedContent.title}"
+Suggested Keywords: ${parsedContent.imageSearchKeywords.join(', ')}
+
+Your task is to find a single, publicly accessible, direct image URL (http or https) that is highly relevant to the blog post title and keywords.
+The image should be suitable for a blog cover. Prioritize high-quality, visually appealing images.
+Return ONLY a JSON object with the following structure: {"imageUrl": "string_url_or_null"}.
+If you cannot find a suitable and directly linkable image, return {"imageUrl": null}.
+Do not provide any other text, explanation, or formatting. Just the JSON object.`;
+
+      try {
+        // Re-using the same model instance 'model' configured earlier
+        const imageSearchResult = await model.generateContent(imageSearchPrompt); // Still expecting JSON
+        const imageSearchResponse = imageSearchResult.response;
+        const imageUrlString = imageSearchResponse.text();
+
+        if (imageUrlString) {
+          const parsedImageResponse = JSON.parse(imageUrlString) as { imageUrl: string | null };
+          if (parsedImageResponse.imageUrl && (parsedImageResponse.imageUrl.startsWith('http://') || parsedImageResponse.imageUrl.startsWith('https://'))) {
+            coverImageUrl = parsedImageResponse.imageUrl;
+            console.log(`Successfully found image URL with Gemini: ${coverImageUrl}`);
+          } else if (parsedImageResponse.imageUrl === null) {
+            console.warn("Gemini search indicated no suitable image URL found (returned null).");
+          } else {
+            console.warn("Gemini image search did not return a valid URL or null. Received:", imageUrlString);
+          }
+        } else {
+          console.warn("Gemini image search returned no content.");
+        }
+      } catch (imageSearchError) {
+        console.error("Error during Gemini image URL search:", imageSearchError);
+        console.warn("Proceeding without a Gemini-found cover image due to search error.");
+      }
+    } else {
+      console.warn("No image search keywords provided by the initial AI generation. Skipping image URL search.");
+    }
 
     return {
-      title: parsedTextContent.title,
-      subtitle: parsedTextContent.subtitle,
-      body: parsedTextContent.body,
-      coverImageUrl: coverImageUrl, // No image from Gemini text model directly
+      title: parsedContent.title,
+      subtitle: parsedContent.subtitle,
+      body: parsedContent.body,
+      coverImageUrl: coverImageUrl,
     };
 
   } catch (error) {
@@ -119,16 +163,20 @@ function generatePlaceholderBlogPost(
   placeholderBody += `\nFurther analysis by a sophisticated AI model (like OpenAI's GPT series) would yield a much richer and more engaging blog post. This is just a simulation.`;
 
   // Simulate a placeholder image URL using a dynamic service
-  const imageKeywords = (fileName || "abstract").split('.')[0].replace(/\s+/g, '+');
-  const placeholderImageUrl = `https://source.unsplash.com/featured/1024x768/?${imageKeywords},${randomId}`;
+  // const imageKeywords = (fileName || "abstract").split('.')[0].replace(/\s+/g, '+');
+  // const placeholderImageUrl = `https://source.unsplash.com/featured/1024x768/?${imageKeywords},${randomId}`;
   // Or use picsum: `https://picsum.photos/seed/${randomId}/1024/768`
+  // console.log(`Using placeholder image URL: ${placeholderImageUrl}`);
+  // No longer using Unsplash/Picsum for placeholders if main generation fails.
+  // The main function will return undefined for coverImageUrl if Gemini image gen fails.
 
-  console.log(`Using placeholder image URL: ${placeholderImageUrl}`);
+  console.log(`No dynamic placeholder image will be used for this simulated post.`);
+
 
   return {
     title: placeholderTitle,
     subtitle: placeholderSubtitle,
     body: placeholderBody,
-    coverImageUrl: placeholderImageUrl,
+    coverImageUrl: undefined, // No placeholder image if AI fails and this function is called
   };
 }

@@ -67,6 +67,11 @@ const config = {
         'logo-bg-slate': 'oklch(0.39 0.018 260)', // Approx #4A5568
         'navbar-gradient-from': 'oklch(35.7% 4.4% 264.1)',
         'navbar-gradient-to': 'oklch(30.5% 3.4% 263.6)',
+        'light-teal-bg': 'oklch(0.9038 0.0457 181.98)',
+        'accent-blue': 'oklch(0.6028 0.0963 262.04)',
+        'light-blue-accent': 'oklch(0.863 0.0591 265.93)',
+        'text-primary': 'oklch(0.5328 0.053 267.98)',
+        'dark-teal-accent': 'oklch(0.5871 0.0612 178.99)',
       },
       borderRadius: {
         lg: "var(--radius)",

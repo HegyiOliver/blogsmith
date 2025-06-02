@@ -27,19 +27,19 @@ function BlogPostCard({ post }: BlogPostCardProps) {
           />
         ) : (
           <div className="flex items-center justify-center w-full h-48 bg-secondary">
-            <span className="text-muted-foreground">No Image</span>
+            <span className="text-muted-foreground !text-blue-50">No Image</span>
           </div>
         )}
         <div className="p-4 sm:p-6 flex-grow flex flex-col">
-          <h2 className="text-xl font-semibold leading-tight tracking-tight mb-1 group-hover:text-primary">
+          <h2 className="text-xl font-semibold leading-tight tracking-tight mb-1 group-hover:text-primary !text-blue-50">
             {post.title}
           </h2>
           {post.subtitle && (
-            <p className="text-sm text-muted-foreground mb-3 flex-grow">
+            <p className="text-sm text-muted-foreground mb-3 flex-grow !text-blue-50">
               {post.subtitle}
             </p>
           )}
-          <p className="text-xs text-muted-foreground mt-auto pt-2">
+          <p className="text-xs text-muted-foreground mt-auto pt-2 !text-blue-50">
             {new Date(post.createdAt).toLocaleDateString()}
           </p>
         </div>
@@ -63,13 +63,13 @@ export default async function BlogPostsPage() {
   });
 
   return (
-    <section className="container py-8 md:py-12">
-      <div className="flex flex-col items-start gap-4 mb-8">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+    <section className="container m-auto py-8 md:py-12">
+      <div className="flex flex-col items-start gap-4 mb-8 m-auto">
+        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter m-auto text-center md:text-4xl !text-blue-50">
           All Blog Posts
         </h1>
         {posts.length === 0 && (
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-muted-foreground text-center m-auto !text-blue-50">
             No blog posts found. Try uploading a document to generate one!
           </p>
         )}

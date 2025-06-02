@@ -77,7 +77,7 @@ export function SiteHeader() {
           <Link
             href="/upload"
             className={cn(
-              "transition-colors text-brand-white hover:text-lime-100 font-medium"
+              "transition-colors text-brand-white hover:text-lime-100 font-medium !text-blue-50"
             )}
           >
             Upload
@@ -85,7 +85,7 @@ export function SiteHeader() {
           <Link
             href="/posts"
             className={cn(
-              "transition-colors text-brand-white hover:text-lime-100 font-medium"
+              "transition-colors text-brand-white hover:text-lime-100 font-medium !text-blue-50"
             )}
           >
             Blog Posts

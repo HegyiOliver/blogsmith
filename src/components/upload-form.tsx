@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent, useRef } from "react";
+import { useRouter } from "next/navigation"; // Added useRouter
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -11,6 +12,7 @@ export function UploadForm() {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter(); // Initialized router
 
   const triggerFileSelect = () => {
     fileInputRef.current?.click();
@@ -62,6 +64,7 @@ export function UploadForm() {
       if (fileInputRef.current) {
         fileInputRef.current.value = ""; // Reset file input
       }
+      router.push("/posts"); // Redirect to blog posts page
     } catch (error: any) {
       toast.error(error.message || "An unexpected error occurred during upload.");
     } finally {
@@ -72,7 +75,7 @@ export function UploadForm() {
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="file-upload-button">Select Document</Label>
+        <Label htmlFor="file-upload-button !text-blue-50">Select Document</Label>
         <Input
           id="file-upload" // Keep id for potential label association if needed elsewhere, though button triggers it
           ref={fileInputRef}
@@ -88,17 +91,17 @@ export function UploadForm() {
           variant="outline" // Use outline variant for a distinct look from the submit button
           onClick={triggerFileSelect}
           disabled={isUploading}
-          className="w-full"
+          className="w-full border-yellow-200 !text-blue-50 !!hover:text-white hover:bg-yellow-200 transition duration-300  hover:scale-105"
         >
           Choose Document
         </Button>
-        {file && <p className="text-sm text-muted-foreground mt-2">Selected: {file.name}</p>}
+        {file && <p className="text-sm text-muted-foreground mt-2 !text-blue-50">Selected: {file.name}</p>}
       </div>
       <Button
         type="submit"
         disabled={isUploading || !file}
         className={cn(
-          "w-full",
+          "w-full bg-orange-200 text-brand-white hover:bg-orange-300 transition-all duration-300 ease-in-out hover:scale-105",
           isUploading && "flaming-button" // Apply flaming effect when uploading
         )}
       >
