@@ -5,66 +5,34 @@
 @layer base {
 :root {
   --color-background: oklch(1 0 0);                /* #FFFFFF */
-  --color-foreground: oklch(0.1877 0.0093 34.79);  /* #1F1F1F */
+  --color-foreground: oklch(0.8321 0.0821 232.65);  /* #89CFF0 */
 
   --color-card: oklch(1 0 0);                      /* #FFFFFF */
-  --color-card-foreground: oklch(0.1877 0.0093 34.79); /* #1F1F1F */
+  --color-card-foreground: oklch(0.8321 0.0821 232.65); /* #89CFF0 */
 
   --color-popover: oklch(1 0 0);                   /* #FFFFFF */
-  --color-popover-foreground: oklch(0.1877 0.0093 34.79); /* #1F1F1F */
+  --color-popover-foreground: oklch(0.8321 0.0821 232.65); /* #89CFF0 */
 
   --color-primary: oklch(0.6215 0.2043 255.15);    /* #0197DB */
   --color-primary-foreground: oklch(1 0 0);        /* #FFFFFF */
 
   --color-secondary: oklch(0.9438 0.006 262.79);   /* #ECECEC */
-  --color-secondary-foreground: oklch(0.1877 0.0093 34.79); /* #1F1F1F */
+  --color-secondary-foreground: oklch(0.8321 0.0821 232.65); /* #89CFF0 */
 
   --color-muted: oklch(0.878 0.0092 262.79);       /* #DADADA */
-  --color-muted-foreground: oklch(0.449 0.0357 262.79); /* #5B5B5B */
+  --color-muted-foreground: oklch(0.8321 0.0821 232.65); /* #89CFF0 */
 
   --color-accent: oklch(0.8074 0.0845 188.56);     /* #7BCDC8 */
-  --color-accent-foreground: oklch(0.1877 0.0093 34.79); /* #1F1F1F */
+  --color-accent-foreground: oklch(0.8321 0.0821 232.65); /* #89CFF0 */
 
   --color-destructive: oklch(0.8119 0.1763 25.5);  /* #F08080 */
-  --color-destructive-foreground: oklch(0.1877 0.0093 34.79); /* #1F1F1F */
+  --color-destructive-foreground: oklch(0.8321 0.0821 232.65); /* #89CFF0 */
 
   --color-border: oklch(0.878 0.0092 262.79);      /* #DADADA */
   --color-input: oklch(0.878 0.0092 262.79);       /* #DADADA */
   --color-ring: oklch(0.6215 0.2043 255.15);       /* #0197DB */
-    --radius: 0.5rem;
-  }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 215 20.2% 65.1%;
-  }
-}
-
-@theme {
-  /* Grays & Primary */
+    /* Grays & Primary */
   --color-white: oklch(1 0 0); /* #FFFFFF */
   --color-gray-100: oklch(0.9438 0 0); /* #ECECEC */
   --color-gray-200: oklch(0.878 0 0); /* #DADADA */
@@ -111,18 +79,25 @@
   --color-orange-100: oklch(0.8119 0.124 69.96); /* #FFB74D */
   --color-orange-200: oklch(0.7588 0.144 58.99); /* #FF9E4A */
   --color-orange-300: oklch(0.6822 0.1768 43.99); /* #FF7733 */
+
+    --radius: 0.5rem;
+  }
 }
 
 body {
-  @apply min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-slate-100 flex flex-col;
+  background: linear-gradient(135deg, oklch(35.7% 4.4% 264.1), oklch(30.5% 3.4% 263.6)); 
+  color: oklch(var(--color-blue-100)); /* Default text color */
+  @apply min-h-screen flex flex-col;
 }
 
 h1 {
   @apply text-4xl sm:text-5xl md:text-6xl;
+  color: oklch(var(--color-blue-100));
 }
 
 h2, h3, h4, h5, h6 {
   @apply font-bold tracking-tight;
+  color: oklch(var(--color-blue-100));
 }
 
 h2 {
@@ -130,17 +105,13 @@ h2 {
 }
 
 p {
-  @apply text-lg text-slate-300;
+  @apply text-lg;
+  color: oklch(var(--color-blue-100)); /* Lighter blue for paragraphs */
 }
 
 a {
-  @apply text-purple-400 hover:text-purple-300 transition-colors duration-200;
-}
-
-@keyframes flamingEffect {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  color: oklch(var(--color-lime-100)); /* Vibrant lime for links */
+  @apply hover:opacity-80 transition-colors duration-200; /* Ensuring hover styles are present */
 }
 
 .flaming-button {

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -57,13 +58,18 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0  z-50 w-full border-b border-slate-700/50  px-2 bg-slate-900/80 backdrop-blur supports-[backdrop-filter]:bg-slate-900/50">
+    <header className="sticky top-0 z-50 w-full border-b pr-2 border-teal-100/50 bg-blue-500/80 backdrop-blur supports-[backdrop-filter]:bg-blue-500/50">
       <div className="container flex m-auto h-16 max-w-screen-2xl items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2" onClick={handleLinkClick}>
-          <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-            BlogSmith
-          </span>
+        <Link href="/" className="flex items-center top-2 relative" onClick={handleLinkClick}>
+          <Image
+            src="/logo-no-bg.png"
+            alt="BlogSmith Logo"
+            width={150} // Adjust width as needed, height will scale
+            height={40} // Adjust height as needed
+            className="h-[65px] w-auto" // Example sizing, adjust as needed
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -71,7 +77,7 @@ export function SiteHeader() {
           <Link
             href="/upload"
             className={cn(
-              "transition-colors text-slate-300 hover:text-purple-400 font-medium"
+              "transition-colors text-brand-white hover:text-lime-100 font-medium"
             )}
           >
             Upload
@@ -79,7 +85,7 @@ export function SiteHeader() {
           <Link
             href="/posts"
             className={cn(
-              "transition-colors text-slate-300 hover:text-purple-400 font-medium"
+              "transition-colors text-brand-white hover:text-lime-100 font-medium"
             )}
           >
             Blog Posts
@@ -90,7 +96,7 @@ export function SiteHeader() {
         <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}
-            className="inline-flex items-center justify-center rounded-md p-2 text-slate-300 hover:bg-slate-700 hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500"
+            className="inline-flex items-center justify-center rounded-md p-2 text-brand-white hover:bg-teal-200/30 hover:text-lime-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-lime-100"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
           >
@@ -108,7 +114,7 @@ export function SiteHeader() {
               href="/upload"
               onClick={handleLinkClick}
               className={cn(
-                "block rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-slate-700 hover:text-purple-400"
+                "block rounded-md px-3 py-2 text-base font-medium text-brand-white hover:bg-teal-200/30 hover:text-lime-100"
               )}
             >
               Upload
@@ -117,7 +123,7 @@ export function SiteHeader() {
               href="/posts"
               onClick={handleLinkClick}
               className={cn(
-                "block rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-slate-700 hover:text-purple-400"
+                "block rounded-md px-3 py-2 text-base font-medium text-brand-white hover:bg-teal-200/30 hover:text-lime-100"
               )}
             >
               Blog Posts

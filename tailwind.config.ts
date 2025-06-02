@@ -52,6 +52,21 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'sense-net-blue': 'oklch(0.6215 0.2043 255.15)',
+        'teal-100': 'oklch(0.5871 0.0612 198.99)',
+        'teal-200': 'oklch(0.8074 0.0845 188.56)',
+        'yellow-100': 'oklch(0.9707 0.066 99.98)',
+        'yellow-200': 'oklch(0.8772 0.1768 95.01)',
+        'orange-100': 'oklch(0.8119 0.124 69.96)',
+        'orange-200': 'oklch(0.7588 0.144 58.99)',
+        'orange-300': 'oklch(0.6822 0.1768 43.99)',
+        'blue-100': 'oklch(0.8321 0.0821 232.65)',
+        'blue-500': 'oklch(0.6028 0.0963 262.04)',
+        'lime-100': 'oklch(0.8995 0.1323 128.92)',
+        'brand-white': 'oklch(1 0 0)', // Renamed to avoid conflict with default 'white'
+        'logo-bg-slate': 'oklch(0.39 0.018 260)', // Approx #4A5568
+        'navbar-gradient-from': 'oklch(35.7% 4.4% 264.1)',
+        'navbar-gradient-to': 'oklch(30.5% 3.4% 263.6)',
       },
       borderRadius: {
         lg: "var(--radius)",
