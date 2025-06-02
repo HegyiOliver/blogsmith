@@ -5,11 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Metadata } from 'next';
 
-type Props = {
-  params: { id: string };
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }:any) {
   const post = await prisma.blogPost.findUnique({
     where: { id: params.id },
     select: { title: true, subtitle: true }
@@ -27,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BlogPostDetailPage({ params }: Props) {
+export default async function BlogPostDetailPage({ params }: any) {
   const post = await prisma.blogPost.findUnique({
     where: { id: params.id },
   });
