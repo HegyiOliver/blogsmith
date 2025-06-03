@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 export const dynamic = 'force-dynamic'; // Prevent static analysis issues
 import mammoth from 'mammoth';
 import pdf from 'pdf-parse';
@@ -48,6 +49,12 @@ async function processAndSaveDocument(file: File) {
       },
     });
     console.log(`[BG_PROCESS_DB_END_SAVE] Blog post saved for ${file.name} with ID: ${newBlogPost.id}`);
+
+    // Revalidate paths to ensure fresh data is fetched
+    revalidatePath('/posts'); // For the posts list page
+    revalidatePath(`/posts/${newBlogPost.id}`); // For the new post's detail page
+    console.log(`[BG_PROCESS_REVALIDATED_PATHS] Revalidated /posts and /posts/${newBlogPost.id}`);
+    
     console.log(`[BG_PROCESS_SUCCESS] Successfully processed and saved ${file.name}`);
 
   } catch (error: any) {

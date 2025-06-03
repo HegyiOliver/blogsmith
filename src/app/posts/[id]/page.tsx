@@ -5,9 +5,16 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Metadata } from 'next';
 
-export async function generateMetadata({ params }:any) {
+interface BlogPostPageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
+export async function generateMetadata({ params }: BlogPostPageProps) {
+  const {id} = await params;
   const post = await prisma.blogPost.findUnique({
-    where: { id: params.id },
+    where: { id: id },
     select: { title: true, subtitle: true }
   });
 
@@ -23,10 +30,10 @@ export async function generateMetadata({ params }:any) {
   };
 }
 
-export default async function BlogPostDetailPage({ params }: any) {
-  await params
+export default async function BlogPostDetailPage({ params }: BlogPostPageProps) {
+   const {id} = await params;
   const post = await prisma.blogPost.findUnique({
-    where: { id: params.id },
+    where: { id: id },
   });
 
   if (!post) {
